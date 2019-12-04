@@ -1,8 +1,11 @@
-import {Component, OnInit} from '@angular/core';
-import {select, Store} from "@ngrx/store";
-import {Observable} from "rxjs";
-import {map} from 'rxjs/operators';
-import {NavigationCancel, NavigationEnd, NavigationError, NavigationStart, Router} from '@angular/router';
+import { Component, OnInit } from '@angular/core';
+import { NavigationCancel, NavigationEnd, NavigationError, NavigationStart, Router } from '@angular/router';
+import { select, Store } from '@ngrx/store';
+import { Observable, Subject } from 'rxjs';
+import { map } from 'rxjs/operators';
+
+import { AppState } from './reducers';
+import { isUserLoggedIn } from './auth/reducers';
 
 @Component({
   selector: 'app-root',
@@ -10,38 +13,37 @@ import {NavigationCancel, NavigationEnd, NavigationError, NavigationStart, Route
   styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit {
+  loading = true;
+  isLoggedIn$: Subject<boolean> = new Subject<boolean>();
 
-    loading = true;
+  constructor(private router: Router, private store: Store<AppState>) {
+  }
 
-    constructor(private router: Router) {
-
-    }
-
-    ngOnInit() {
-
-      this.router.events.subscribe(event  => {
-        switch (true) {
-          case event instanceof NavigationStart: {
-            this.loading = true;
-            break;
-          }
-
-          case event instanceof NavigationEnd:
-          case event instanceof NavigationCancel:
-          case event instanceof NavigationError: {
-            this.loading = false;
-            break;
-          }
-          default: {
-            break;
-          }
+  ngOnInit() {
+    this.router.events.subscribe(event => {
+      switch (true) {
+        case event instanceof NavigationStart: {
+          this.loading = true;
+          break;
         }
-      });
+        case event instanceof NavigationEnd:
+        case event instanceof NavigationCancel:
+        case event instanceof NavigationError: {
+          this.loading = false;
+          break;
+        }
+        default: {
+          break;
+        }
+      }
+    });
+    this.store
+      .pipe(
+        select(isUserLoggedIn)
+      )
+      .subscribe(isLoggedIn => this.isLoggedIn$.next(isLoggedIn));
+  }
 
-    }
-
-    logout() {
-
-    }
-
+  logout() {
+  }
 }

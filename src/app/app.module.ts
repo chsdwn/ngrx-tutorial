@@ -22,6 +22,7 @@ import {EffectsModule} from '@ngrx/effects';
 import {EntityDataModule} from '@ngrx/data';
 import {MatProgressSpinnerModule} from '@angular/material';
 import { reducers, metaReducers } from './reducers';
+import { CommonModule } from '@angular/common';
 
 
 const routes: Routes = [
@@ -44,6 +45,7 @@ const routes: Routes = [
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
+    CommonModule,
     RouterModule.forRoot(routes),
     HttpClientModule,
     MatMenuModule,
