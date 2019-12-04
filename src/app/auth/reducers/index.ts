@@ -9,7 +9,7 @@ import {
   Action
 } from '@ngrx/store';
 import { User } from '../model/user.model';
-import { login, logout } from '../auth.actions';
+import { login, logout, autoLogin } from '../auth.actions';
 import { AppState } from '../../reducers';
 
 export interface AuthState {
@@ -29,7 +29,8 @@ const _authReducer = createReducer(
   }), */
   // on(login, (state, action) => ({user: action.user})),
   on(login, (state, {user}) => ({user})),
-  on(logout, state => ({user: undefined}))
+  on(logout, state => ({user: undefined})),
+  on(autoLogin)
 );
 
 export function authReducer(state: AuthState = initialAuthState, action: Action) {

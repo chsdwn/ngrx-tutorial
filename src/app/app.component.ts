@@ -5,8 +5,8 @@ import { Observable, Subject } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { AppState } from './reducers';
-import { isUserLoggedIn } from './auth/reducers';
-import { logout } from './auth/auth.actions';
+import * as AuthReducers from './auth/reducers';
+import * as AuthActions from './auth/auth.actions';
 
 @Component({
   selector: 'app-root',
@@ -21,6 +21,7 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.store.dispatch(AuthActions.autoLogin());
     this.router.events.subscribe(event => {
       switch (true) {
         case event instanceof NavigationStart: {
@@ -40,13 +41,13 @@ export class AppComponent implements OnInit {
     });
     this.store
       .pipe(
-        select(isUserLoggedIn)
+        select(AuthReducers.isUserLoggedIn)
       )
       .subscribe(isLoggedIn => this.isLoggedIn$.next(isLoggedIn));
   }
 
   logout() {
-    this.store.dispatch(logout());
+    this.store.dispatch(AuthActions.logout());
     this.router.navigate(['login']);
   }
 }
