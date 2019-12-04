@@ -29,14 +29,15 @@ const _authReducer = createReducer(
   }), */
   // on(login, (state, action) => ({user: action.user})),
   on(login, (state, {user}) => ({user})),
-  on(logout, state => state)
+  on(logout, state => ({user: undefined}))
 );
 
 export function authReducer(state: AuthState = initialAuthState, action: Action) {
   return _authReducer(state, action);
 }
 
-export const authState = (state: AppState) => state.auth;
+// export const authState = (state: AppState) => state.auth;
+export const authState = createFeatureSelector<AppState, AuthState>('auth');
 
 export const isUserLoggedIn = createSelector(
   authState,

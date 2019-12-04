@@ -6,6 +6,7 @@ import { map } from 'rxjs/operators';
 
 import { AppState } from './reducers';
 import { isUserLoggedIn } from './auth/reducers';
+import { logout } from './auth/auth.actions';
 
 @Component({
   selector: 'app-root',
@@ -45,5 +46,7 @@ export class AppComponent implements OnInit {
   }
 
   logout() {
+    this.store.dispatch(logout());
+    this.router.navigate(['login']);
   }
 }

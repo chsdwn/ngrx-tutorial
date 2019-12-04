@@ -23,20 +23,26 @@ import {EntityDataModule} from '@ngrx/data';
 import {MatProgressSpinnerModule} from '@angular/material';
 import { reducers, metaReducers } from './reducers';
 import { CommonModule } from '@angular/common';
+import { AuthGuard } from './auth/auth.guard';
+import { LoginComponent } from './auth/login/login.component';
 
 
 const routes: Routes = [
   {
     path: 'courses',
-    loadChildren: () => import('./courses/courses.module').then(m => m.CoursesModule)
+    loadChildren: () => import('./courses/courses.module').then(m => m.CoursesModule),
+    canActivate: [AuthGuard]
+  },
+  {
+    path: '',
+    pathMatch: 'full',
+    redirectTo: 'courses'
   },
   {
     path: '**',
     redirectTo: '/'
   }
 ];
-
-
 
 @NgModule({
   declarations: [
