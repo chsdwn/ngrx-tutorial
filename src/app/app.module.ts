@@ -63,7 +63,12 @@ const routes: Routes = [
     AuthModule.forRoot(),
     StoreModule.forRoot(reducers, { metaReducers }),
     StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: environment.production }),
-    EffectsModule.forRoot([])
+    EffectsModule.forRoot([]),
+    // This code block needed to run time traveling feature on ngrx dev tool.
+    StoreRouterConnectingModule.forRoot({
+      stateKey: 'router', // Added to reducers.
+      routerState: RouterState.Minimal
+    })
   ],
   bootstrap: [AppComponent]
 })
