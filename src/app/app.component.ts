@@ -15,7 +15,7 @@ import * as AuthActions from './auth/auth.actions';
 })
 export class AppComponent implements OnInit {
   loading = true;
-  isLoggedIn$: Subject<boolean> = new Subject<boolean>();
+  isLoggedIn$ = new Observable<boolean>();
 
   constructor(private router: Router, private store: Store<AppState>) {
   }
@@ -39,11 +39,10 @@ export class AppComponent implements OnInit {
         }
       }
     });
-    this.store
+    this.isLoggedIn$ = this.store
       .pipe(
         select(AuthReducers.isUserLoggedIn)
-      )
-      .subscribe(isLoggedIn => this.isLoggedIn$.next(isLoggedIn));
+      );
   }
 
   logout() {
